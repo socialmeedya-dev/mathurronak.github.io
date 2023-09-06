@@ -99,8 +99,24 @@ function isMobileDevice() {
   return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
 }
 
-// Function to send a WhatsApp message
+
+// Function to send a WhatsApp message on mobile
 function sendWhatsAppMessage(senderName, message) {
+  const phoneNumber = 'PHONE_NUMBER_HERE'; // Replace with the recipient's phone number
+  window.open(`whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent("Hello i am "+ senderName + ", and i have a query regarding :- " + message)}`, '_blank');
+
+  // If the WhatsApp app is not available, open WhatsApp Web on desktop
+  setTimeout(function() {
+    if (!document.hidden) {
+      // If the user hasn't switched apps or tabs, open WhatsApp Web
+      sendWhatsAppWebMessage(senderName, message);
+    }
+  }, 2000); // Check if the user switches back after 1 second
+}
+
+
+// Function to send a WhatsApp message on browser
+function sendWhatsWebMessage(senderName, message) {
   const phoneNumber = '+918769018313'; // Replace with the recipient's phone number
   window.open(`https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent("Hello i am "+ senderName + ", and i have a query regarding :- " + message)}`, '_blank');
 }
@@ -135,7 +151,7 @@ function handleSubmit(event) {
   } else {
     // If not on a mobile device, check WhatsApp Web availability
     if (confirm('Would you like to open WhatsApp Web?')) {
-      sendWhatsAppMessage(senderName, message);
+      sendWhatsWebMessage(senderName, message);
     } else {
       // If user declines WhatsApp Web, send an email
       sendEmail(senderEmail, senderName, message);
