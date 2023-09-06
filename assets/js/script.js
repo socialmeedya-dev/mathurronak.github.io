@@ -68,25 +68,6 @@ const filterFunc = function (selectedValue) {
 
 }
 
-// contact form variables
-const form = document.querySelector("[data-form]");
-const formInputs = document.querySelectorAll("[data-form-input]");
-const formBtn = document.querySelector("[data-form-btn]");
-
-// add event to all form input field
-for (let i = 0; i < formInputs.length; i++) {
-  formInputs[i].addEventListener("input", function () {
-
-    // check form validation
-    if (form.checkValidity()) {
-      formBtn.removeAttribute("disabled");
-    } else {
-      formBtn.setAttribute("disabled", "");
-    }
-
-  });
-}
-
 
 
 // page navigation variables
@@ -110,3 +91,58 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+//contact form
+
+// Function to check if the user is on a mobile device
+function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+}
+
+// Function to send a WhatsApp message
+function sendWhatsAppMessage(senderName, message) {
+  const phoneNumber = '+918769018313'; // Replace with the recipient's phone number
+  window.open(`https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent("Hello i am "+ senderName + ", and i have a query regarding :- " + message)}`, '_blank');
+}
+
+// Function to send an email via Gmail
+function sendEmail(senderEmail, senderName, message) {
+  const receiverEmail = 'amanbhargava1998@gmail.com'; // Replace with your email address
+  const subject = `Message from ${senderName}`;
+  const body = `Sender's Email: ${senderEmail}\n\nMessage: ${message}`;
+  
+  const mailtoUrl = `mailto:${receiverEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+  const newWindow = window.open(mailtoUrl, 'EmailWindow');
+  
+  if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+    // If the email window fails to open, show an error alert
+    alert('Error: Unable to send email. Please try again later.');
+  }
+}
+
+// Function to handle form submission
+function handleSubmit(event) {
+  event.preventDefault();
+  
+  const senderName = document.getElementById('senderName').value;
+  const senderEmail = document.getElementById('senderEmail').value;
+  const message = document.getElementById('message').value;
+
+  if (isMobileDevice()) {
+    // If on a mobile device, send a WhatsApp message
+    sendWhatsAppMessage(senderName, message);
+  } else {
+    // If not on a mobile device, check WhatsApp Web availability
+    if (confirm('Would you like to open WhatsApp Web?')) {
+      sendWhatsAppMessage(senderName, message);
+    } else {
+      // If user declines WhatsApp Web, send an email
+      sendEmail(senderEmail, senderName, message);
+    }
+  }
+}
+
+// Add a submit event listener to the form element
+const contactForm = document.getElementById('contactForm');
+contactForm.addEventListener('submit', handleSubmit);
