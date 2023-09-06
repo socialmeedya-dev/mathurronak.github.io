@@ -103,7 +103,7 @@ function isMobileDevice() {
 // Function to send a WhatsApp message on mobile
 function sendWhatsAppMessage(senderName, message) {
   const phoneNumber = 'PHONE_NUMBER_HERE'; // Replace with the recipient's phone number
-  window.open(`whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent("Hello i am "+ senderName + ", and i have a query regarding :- " + message)}`, '_blank');
+  window.open(`https://wa.me/${phoneNumber}&text=${encodeURIComponent("Hello i am "+ senderName + ", and i have a query regarding :- " + message)}`, '_blank');
 
   // If the WhatsApp app is not available, open WhatsApp Web on desktop
   setTimeout(function() {
